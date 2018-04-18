@@ -17,7 +17,13 @@ namespace Logica
 
         public static Jugador ObtenerJugador(string nombre)
         {
-            //Agregar logica de buscar en la lista y retornar
+            var agregar = Jugadores.SingleOrDefault(x => x.Nombre == nombre);
+            if (agregar == null)
+            {
+                agregar = new Jugador();
+                agregar.Nombre = nombre;
+            }
+            return agregar;
         }
     }
 }
