@@ -23,6 +23,7 @@ namespace Logica
                 agregar = new Jugador();
                 agregar.Nombre = nombre;
             }
+
             return agregar;
         }
     }

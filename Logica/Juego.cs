@@ -11,7 +11,5 @@ namespace Logica
         public List <Partida> Partidas { get; set; }
         public List<Jugador> Jugadores { get; set; }
         public List <Mazo> Mazos { get; set; }
-
-
     }
 }
