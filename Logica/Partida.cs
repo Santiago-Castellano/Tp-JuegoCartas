@@ -12,28 +12,36 @@ namespace Logica
         public Jugador JugadorDos {get; set;}
         public Mazo Mazo { get; set; }
 
-        public enum Turnos
-        {
-            TurnoUno,
-            TurnoDos
-        }
-        public Turnos Turno { get; set; }
+     
+       
 
-        public Partida()
+        public Partida(Mazo mazo, Jugador jugador)
         {
-            Turno = Turnos.TurnoUno;
+            this.Mazo = mazo;
+            this.JuegadorUno = jugador;
         }
 
-        public void CambioDeTurno()
+
+        public void Mezclar()
         {
-            if (this.Turno == Turnos.TurnoUno)
+            for (int i = 0; i < (this.Mazo.Cartas.Count/2); i++)
             {
-                this.Turno = Turnos.TurnoDos;
-            }
-            else
-            {
-                this.Turno = Turnos.TurnoUno;
+                Random random1 = new Random(this.Mazo.Cartas.Count + 1);
+                Random random2 = new Random(this.Mazo.Cartas.Count + 1);
+                while (random1 == random2)
+                {
+                    random2 = new Random(this.Mazo.Cartas.Count + 1);
+                }
+                Carta aux = new Carta();
+                aux = this.Mazo.Cartas[Convert.ToInt32(random1)];
+                this.Mazo.Cartas[Convert.ToInt32(random1)] = this.Mazo.Cartas[Convert.ToInt32(random2)];
+                this.Mazo.Cartas[Convert.ToInt32(random2)] = aux;
             }
         }
+
+        
+
+
+
     }
 }
