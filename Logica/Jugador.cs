@@ -9,7 +9,11 @@ namespace Logica
     public class Jugador
     {
         public string Nombre { get; set; }
-        private Jugador() {}
+        public List<Carta> Cartas { get; set; }
+        private Jugador()
+        {
+            this.Cartas = new List<Carta>();
+        }
 
         private static List<Jugador> Jugadores = new List<Jugador>();
 
