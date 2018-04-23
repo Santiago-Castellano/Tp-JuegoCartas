@@ -20,7 +20,6 @@ namespace Logica
         public string Codigo { get; set; }
 
 
-
         public Carta()
         {
             this.Atributos = new List<Atributo>();
