@@ -8,7 +8,7 @@ namespace Logica
 {
     public class Partida
     {
-        public Jugador JuegadorUno { get; set; }
+        public Jugador JugadorUno { get; set; }
         public Jugador JugadorDos {get; set;}
         public Mazo Mazo { get; set; }
 
@@ -18,7 +18,7 @@ namespace Logica
         public Partida(Mazo mazo, Jugador jugador)
         {
             this.Mazo = mazo;
-            this.JuegadorUno = jugador;
+            this.JugadorUno = jugador;
         }
 
 
@@ -39,7 +39,22 @@ namespace Logica
             }
         }
 
-        
+        public void Repartir()
+        {
+            int cont = 0;
+
+            for (int i = 0; i <= (this.Mazo.Cartas.Count)/2; i++)
+            {
+                this.JugadorUno.Cartas.Add(this.Mazo.Cartas[i]);
+                cont = i;
+            }
+            cont = cont + 1;
+            for (int s = cont; s <= this.Mazo.Cartas.Count; s ++)
+            {
+                this.JugadorDos.Cartas.Add(this.Mazo.Cartas[s]);
+            }
+
+        }
 
 
 
