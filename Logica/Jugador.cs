@@ -9,9 +9,7 @@ namespace Logica
     public class Jugador
     {
         public string Nombre { get; set; }
-        private Jugador()
-        {
-        }
+        private Jugador() {}
 
         private static List<Jugador> Jugadores = new List<Jugador>();
 
