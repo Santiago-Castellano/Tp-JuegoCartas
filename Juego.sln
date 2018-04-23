@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Juego.Entidades", "Logica\Juego.Entidades.csproj", "{C1A6F667-5515-499B-AC42-3417F8DAEE1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Juego.Test", "Juego.Test\Juego.Test.csproj", "{136EC988-2BFE-4E35-B52E-8992D83521A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C1A6F667-5515-499B-AC42-3417F8DAEE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1A6F667-5515-499B-AC42-3417F8DAEE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1A6F667-5515-499B-AC42-3417F8DAEE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{136EC988-2BFE-4E35-B52E-8992D83521A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{136EC988-2BFE-4E35-B52E-8992D83521A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{136EC988-2BFE-4E35-B52E-8992D83521A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{136EC988-2BFE-4E35-B52E-8992D83521A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
