@@ -12,6 +12,7 @@ namespace Juego.Entidades
         {
             Roja,
             Amarilla,
+            Normal,
             Especial
         }
             
