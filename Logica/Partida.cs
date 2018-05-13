@@ -12,9 +12,6 @@ namespace Juego.Entidades
         public Jugador JugadorDos {get; set;}
         public Mazo Mazo { get; set; }
 
-     
-       
-
         public Partida(Mazo mazo, Jugador jugador)
         {
             this.Mazo = mazo;
@@ -67,12 +64,12 @@ namespace Juego.Entidades
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.Add(CartaUno);
+                        this.JugadorUno.Cartas.Add(CartaDos);
                         var aux = this.JugadorDos.Cartas.First();
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.Add(aux);
-                        aux = this.JugadorDos.Cartas.First();
-                        this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.Add(aux);
+                        
+                  
                     }
                 }
 
@@ -93,12 +90,11 @@ namespace Juego.Entidades
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.Add(CartaDos);
+                        this.JugadorDos.Cartas.Add(CartaUno);
                         var aux = this.JugadorUno.Cartas.First();
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.Add(aux);
-                        aux = this.JugadorUno.Cartas.First();
-                        this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.Add(aux);
+                     
                     }
                 }
             }
@@ -108,13 +104,23 @@ namespace Juego.Entidades
                 {
                     this.JugadorDos.Cartas.RemoveAt(0);
                     this.JugadorDos.Cartas.Add(CartaDos);
-                    this.JugadorUno.Cartas.OrderBy(x => x.Atributos.First());
+                    var aux = this.JugadorDos.Cartas.Where(x => x.Codigo != "Hola").ToList();
+                    aux.OrderBy(x => x.Atributos.First());
+                    var mayor = aux.First();
+                    this.JugadorDos.Cartas.Remove(mayor);
+                    this.JugadorUno.Cartas.Add(mayor);
                 }
                 if (CartaDos.Tipo == Carta.TipoCarta.Especial)
                 {
                     this.JugadorUno.Cartas.RemoveAt(0);
                     this.JugadorUno.Cartas.Add(CartaUno);
-                    this.JugadorDos.Cartas.OrderBy(x => x.Atributos.First());
+                    var aux = this.JugadorUno.Cartas.Where(x => x.Codigo !=  "Hola").ToList();
+                    aux.OrderBy(x => x.Atributos.First());
+                    var mayor = aux.First();
+                    this.JugadorUno.Cartas.Remove(mayor);
+                    this.JugadorDos.Cartas.Add(mayor);
+                    
+                    
                 }
             }
 
@@ -124,16 +130,18 @@ namespace Juego.Entidades
         {
             for (int i = 0; i < (this.Mazo.Cartas.Count/2); i++)
             {
-                Random random1 = new Random(this.Mazo.Cartas.Count + 1);
-                Random random2 = new Random(this.Mazo.Cartas.Count + 1);
+                Random random1 = new Random();
+                Random random2 = new Random();
+                int rand1 = random1.Next(0, this.Mazo.Cartas.Count + 1);
+                int rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
                 while (random1 == random2)
                 {
-                    random2 = new Random(this.Mazo.Cartas.Count + 1);
+                    rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
                 }
                 Carta aux = new Carta();
-                aux = this.Mazo.Cartas[Convert.ToInt32(random1)];
-                this.Mazo.Cartas[Convert.ToInt32(random1)] = this.Mazo.Cartas[Convert.ToInt32(random2)];
-                this.Mazo.Cartas[Convert.ToInt32(random2)] = aux;
+                aux = this.Mazo.Cartas[rand1];
+                this.Mazo.Cartas[rand1] = this.Mazo.Cartas[rand2];
+                this.Mazo.Cartas[rand2] = aux;
             }
         }
 
@@ -141,16 +149,17 @@ namespace Juego.Entidades
         {
             int cont = 0;
 
-            for (int i = 0; i <= (this.Mazo.Cartas.Count)/2; i++)
+            for (int i = 0; i < (this.Mazo.Cartas.Count)/2; i++)
             {
                 this.JugadorUno.Cartas.Add(this.Mazo.Cartas[i]);
                 cont = i;
             }
             cont = cont + 1;
-            for (int s = cont; s <= this.Mazo.Cartas.Count; s ++)
+            for (int s = cont; s < this.Mazo.Cartas.Count; s ++)
             {
                 this.JugadorDos.Cartas.Add(this.Mazo.Cartas[s]);
             }
+            
 
         }
 
