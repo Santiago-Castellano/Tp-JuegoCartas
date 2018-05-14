@@ -16,7 +16,7 @@ namespace Juego.Entidades
             Especial
         }
             
-        public List<Atributo> Atributos { get; set; }
+        public List<Atributo> Atributos { get; set; }  // 0- DEL ; 1 - MED ; 2 - DEF 
         public TipoCarta Tipo { get; set; }
         public string Codigo { get; set; }
 

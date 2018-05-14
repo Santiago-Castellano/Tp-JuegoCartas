@@ -18,6 +18,52 @@ namespace Juego.Entidades
             this.JugadorUno = jugador;
         }
 
+        public int Cantar(Atributo atributoseleccionado)
+        {
+            int resultado = 0;
+            Carta cartaUno = this.JugadorUno.Cartas.First();
+            Carta cartaDos = this.JugadorDos.Cartas.First();
+
+            switch (atributoseleccionado.Nombre)
+            {
+                case "DEL":
+                    if (cartaUno.Atributos[0].Valor < cartaDos.Atributos[0].Valor)
+                    {
+                        resultado = 2;
+                    }
+                    else
+                    {
+                        resultado = 1;
+                    }
+                    break;
+                case "MED":
+                    if (cartaUno.Atributos[1].Valor < cartaDos.Atributos[1].Valor)
+                    {
+                        resultado = 2;
+                    }
+                    else
+                    {
+                        resultado = 1;
+                    }
+
+                    break;
+                case "DEF":
+                    if (cartaUno.Atributos[2].Valor < cartaDos.Atributos[2].Valor)
+                    {
+                        resultado = 2;
+                    }
+                    else
+                    {
+                        resultado = 1;
+                    }
+
+                    break;
+                
+            }
+
+            return resultado;
+        }
+
         public void ActualizaMazosNormal(int ganador)
         {
             if (ganador == 1)
