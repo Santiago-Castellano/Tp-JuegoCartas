@@ -21,8 +21,8 @@ namespace Juego.Test
             }
 
             var mazoaux = mazo.Cartas.Where(x => Convert.ToInt32(x.Codigo) >= 0).ToList();
-            
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
+
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
             partida.Mezclar();
 
             Assert.AreNotEqual(mazoaux,partida.Mazo.Cartas);
@@ -37,8 +37,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString() });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
 
             partida.Repartir();
 
@@ -119,8 +119,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString() });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
 
             partida.Repartir();
             partida.ActualizaMazosNormal(1);
@@ -142,8 +142,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString() });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
 
             partida.Repartir();
             partida.ActualizaMazosNormal(2);
@@ -164,9 +164,9 @@ namespace Juego.Test
             {
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString(),Tipo = Carta.TipoCarta.Normal });
             }
-            
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
 
             partida.Repartir();
             Carta CartaRoja = new Carta();
@@ -197,8 +197,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString(), Tipo = Carta.TipoCarta.Normal });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
             partida.Repartir();
             Carta CartaRoja = new Carta();
             CartaRoja.Tipo = Carta.TipoCarta.Roja;
@@ -228,8 +228,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString(), Tipo = Carta.TipoCarta.Normal });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
             partida.Repartir();
 
             Carta CartaRoja = new Carta();
@@ -260,8 +260,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString(), Tipo = Carta.TipoCarta.Normal });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
             partida.Repartir();
             Carta CartaRoja = new Carta();
             CartaRoja.Tipo = Carta.TipoCarta.Roja;
@@ -289,8 +289,8 @@ namespace Juego.Test
                 mazo.Cartas.Add(new Carta { Codigo = i.ToString(), Tipo = Carta.TipoCarta.Normal });
             }
 
-            Partida partida = new Partida(mazo, Jugador.ObtenerJugador("Santi"));
-            partida.JugadorDos = Jugador.ObtenerJugador("Mica");
+            Partida partida = new Partida(mazo, new Jugador { Nombre = "Santi" });
+            partida.JugadorDos = new Jugador { Nombre = "Mica" };
 
             partida.Repartir();
             Carta CartaEspecial = new Carta();
