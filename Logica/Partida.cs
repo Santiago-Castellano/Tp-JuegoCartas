@@ -18,48 +18,45 @@ namespace Juego.Entidades
             this.JugadorUno = jugador;
         }
 
-        public int Cantar(Atributo atributoseleccionado)
+        public int Cantar(string atributoseleccionado)
         {
             int resultado = 0;
             Carta cartaUno = this.JugadorUno.Cartas.First();
             Carta cartaDos = this.JugadorDos.Cartas.First();
-
-            switch (atributoseleccionado.Nombre)
+            if (cartaUno.Tipo == Carta.TipoCarta.Normal && cartaDos.Tipo == Carta.TipoCarta.Normal)
             {
-                case "DEL":
-                    if (cartaUno.Atributos[0].Valor < cartaDos.Atributos[0].Valor)
-                    {
-                        resultado = 2;
-                    }
-                    else
-                    {
-                        resultado = 1;
-                    }
-                    break;
-                case "MED":
-                    if (cartaUno.Atributos[1].Valor < cartaDos.Atributos[1].Valor)
-                    {
-                        resultado = 2;
-                    }
-                    else
-                    {
-                        resultado = 1;
-                    }
+                List<string> nombresDeAtributos = new List<string>();
+                foreach (Atributo item in cartaUno.Atributos)
+                {
+                    nombresDeAtributos.Add(item.Nombre);
+                }
 
-                    break;
-                case "DEF":
-                    if (cartaUno.Atributos[2].Valor < cartaDos.Atributos[2].Valor)
+                int atributocantado = 0;
+                int cont = 0;
+                foreach (string item in nombresDeAtributos)
+                {
+                    if (atributoseleccionado == item)
                     {
-                        resultado = 2;
+                        atributocantado = cont;
                     }
-                    else
-                    {
-                        resultado = 1;
-                    }
+                    cont += cont;
+                }
 
-                    break;
-                
+                if (cartaUno.Atributos[atributocantado].Valor < cartaDos.Atributos[atributocantado].Valor)
+                {
+                    resultado = 2;
+                }
+                else
+                {
+                    resultado = 1;
+                }
             }
+            else
+            {
+                resultado = 0;
+            }
+            
+
 
             return resultado;
         }
@@ -99,8 +96,6 @@ namespace Juego.Entidades
                     {
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.Add(CartaUno);
-                        this.JugadorUno.Cartas.Add(CartaDos);
                         var aux = this.JugadorDos.Cartas.First();
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.Add(aux);
@@ -109,7 +104,6 @@ namespace Juego.Entidades
                     {
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.Add(CartaUno);
                         this.JugadorUno.Cartas.Add(CartaDos);
                         var aux = this.JugadorDos.Cartas.First();
                         this.JugadorDos.Cartas.RemoveAt(0);
@@ -125,8 +119,6 @@ namespace Juego.Entidades
                     {
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.Add(CartaDos);
-                        this.JugadorDos.Cartas.Add(CartaUno);
                         var aux = this.JugadorUno.Cartas.First();
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.Add(aux);
@@ -135,7 +127,6 @@ namespace Juego.Entidades
                     {
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.Add(CartaDos);
                         this.JugadorDos.Cartas.Add(CartaUno);
                         var aux = this.JugadorUno.Cartas.First();
                         this.JugadorUno.Cartas.RemoveAt(0);
@@ -164,9 +155,7 @@ namespace Juego.Entidades
                     aux.OrderBy(x => x.Atributos.First());
                     var mayor = aux.First();
                     this.JugadorUno.Cartas.Remove(mayor);
-                    this.JugadorDos.Cartas.Add(mayor);
-                    
-                    
+                    this.JugadorDos.Cartas.Add(mayor);   
                 }
             }
 
