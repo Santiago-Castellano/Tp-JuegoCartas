@@ -9,7 +9,7 @@ namespace Juego.Entidades
     public class Partida
     {
         public Jugador JugadorUno { get; set; }
-        public Jugador JugadorDos {get; set;}
+        public Jugador JugadorDos { get; set; }
         public Mazo Mazo { get; set; }
 
         public Partida(Mazo mazo, Jugador jugador)
@@ -18,9 +18,20 @@ namespace Juego.Entidades
             this.JugadorUno = jugador;
         }
 
-        public int Cantar(string atributoseleccionado)
+        public enum TipoResultado 
         {
-            int resultado = 0;
+            Normal = 0,
+            Amarilla = 1,
+            Roja = 2,
+            RojaAmarilla = 3,
+            Especial = 4
+        }
+
+
+        public TipoResultado Cantar(string atributoseleccionado, string codigocarta) //ver como hacer control de la carta
+        {
+            TipoResultado Devolver = 0;
+            int resultado = 0; 
             Carta cartaUno = this.JugadorUno.Cartas.First();
             Carta cartaDos = this.JugadorDos.Cartas.First();
             if (cartaUno.Tipo == Carta.TipoCarta.Normal && cartaDos.Tipo == Carta.TipoCarta.Normal)
@@ -30,7 +41,6 @@ namespace Juego.Entidades
                 {
                     nombresDeAtributos.Add(item.Nombre);
                 }
-
                 int atributocantado = 0;
                 int cont = 0;
                 foreach (string item in nombresDeAtributos)
@@ -41,7 +51,6 @@ namespace Juego.Entidades
                     }
                     cont += cont;
                 }
-
                 if (cartaUno.Atributos[atributocantado].Valor < cartaDos.Atributos[atributocantado].Valor)
                 {
                     resultado = 2;
@@ -55,10 +64,16 @@ namespace Juego.Entidades
             {
                 resultado = 0;
             }
-            
-
-
-            return resultado;
+            if (resultado == 0)
+            {
+                Devolver = this.ActualizarMazoEspecial();
+            }
+            else
+            {
+                this.ActualizaMazosNormal(resultado);
+                Devolver = TipoResultado.Normal;
+            }
+            return Devolver;
         }
 
         public void ActualizaMazosNormal(int ganador)
@@ -84,8 +99,9 @@ namespace Juego.Entidades
             }
         }
 
-        public void ActualizarMazoEspecial()
+        public TipoResultado ActualizarMazoEspecial()
         {
+            TipoResultado resultado = 0;
             var CartaUno = this.JugadorUno.Cartas.First();
             var CartaDos = this.JugadorDos.Cartas.First();
             if (CartaDos.Tipo != Carta.TipoCarta.Especial & CartaUno.Tipo != Carta.TipoCarta.Especial)
@@ -99,6 +115,7 @@ namespace Juego.Entidades
                         var aux = this.JugadorDos.Cartas.First();
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.Add(aux);
+                        resultado = TipoResultado.RojaAmarilla;
                     }
                     if (CartaDos.Tipo == Carta.TipoCarta.Normal)
                     {
@@ -108,8 +125,7 @@ namespace Juego.Entidades
                         var aux = this.JugadorDos.Cartas.First();
                         this.JugadorDos.Cartas.RemoveAt(0);
                         this.JugadorUno.Cartas.Add(aux);
-                        
-                  
+                        resultado = TipoResultado.Roja;
                     }
                 }
 
@@ -122,6 +138,7 @@ namespace Juego.Entidades
                         var aux = this.JugadorUno.Cartas.First();
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.Add(aux);
+                        resultado = TipoResultado.RojaAmarilla;
                     }
                     if (CartaUno.Tipo == Carta.TipoCarta.Normal)
                     {
@@ -131,12 +148,13 @@ namespace Juego.Entidades
                         var aux = this.JugadorUno.Cartas.First();
                         this.JugadorUno.Cartas.RemoveAt(0);
                         this.JugadorDos.Cartas.Add(aux);
-                     
+                        resultado = TipoResultado.Roja;
                     }
                 }
             }
             else
             {
+                resultado = TipoResultado.Especial;
                 if (CartaUno.Tipo == Carta.TipoCarta.Especial)
                 {
                     this.JugadorDos.Cartas.RemoveAt(0);
@@ -158,43 +176,47 @@ namespace Juego.Entidades
                     this.JugadorDos.Cartas.Add(mayor);   
                 }
             }
-
+            return resultado;
         }
 
         public void Mezclar()
         {
-            for (int i = 0; i < (this.Mazo.Cartas.Count/2); i++)
+            if (this.Mazo != null && this.JugadorDos != null)
             {
-                Random random1 = new Random();
-                Random random2 = new Random();
-                int rand1 = random1.Next(0, this.Mazo.Cartas.Count + 1);
-                int rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
-                while (random1 == random2)
+                for (int i = 0; i < (this.Mazo.Cartas.Count / 2); i++)
                 {
-                    rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
+                    Random random1 = new Random();
+                    Random random2 = new Random();
+                    int rand1 = random1.Next(0, this.Mazo.Cartas.Count + 1);
+                    int rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
+                    while (random1 == random2)
+                    {
+                        rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
+                    }
+                    Carta aux = new Carta();
+                    aux = this.Mazo.Cartas[rand1];
+                    this.Mazo.Cartas[rand1] = this.Mazo.Cartas[rand2];
+                    this.Mazo.Cartas[rand2] = aux;
                 }
-                Carta aux = new Carta();
-                aux = this.Mazo.Cartas[rand1];
-                this.Mazo.Cartas[rand1] = this.Mazo.Cartas[rand2];
-                this.Mazo.Cartas[rand2] = aux;
             }
         }
 
         public void Repartir()
         {
-            int cont = 0;
-
-            for (int i = 0; i < (this.Mazo.Cartas.Count)/2; i++)
+            if (this.Mazo != null && this.JugadorDos != null)
             {
-                this.JugadorUno.Cartas.Add(this.Mazo.Cartas[i]);
-                cont = i;
+                int cont = 0;
+                for (int i = 0; i < (this.Mazo.Cartas.Count) / 2; i++)
+                {
+                    this.JugadorUno.Cartas.Add(this.Mazo.Cartas[i]);
+                    cont = i;
+                }
+                cont = cont + 1;
+                for (int s = cont; s < this.Mazo.Cartas.Count; s++)
+                {
+                    this.JugadorDos.Cartas.Add(this.Mazo.Cartas[s]);
+                }
             }
-            cont = cont + 1;
-            for (int s = cont; s < this.Mazo.Cartas.Count; s ++)
-            {
-                this.JugadorDos.Cartas.Add(this.Mazo.Cartas[s]);
-            }
-            
 
         }
 
