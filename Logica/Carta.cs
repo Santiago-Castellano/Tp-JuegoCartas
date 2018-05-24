@@ -19,6 +19,7 @@ namespace Juego.Entidades
         public List<Atributo> Atributos { get; set; }  // 0- DEL ; 1 - MED ; 2 - DEF 
         public TipoCarta Tipo { get; set; }
         public string Codigo { get; set; }
+        public string Nombre { get; set; }
 
 
         public Carta()
