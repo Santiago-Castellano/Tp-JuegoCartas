@@ -30,8 +30,8 @@ namespace Juego.Entidades
 
         public TipoResultado Cantar(string atributoseleccionado, string codigocarta) //ver como hacer control de la carta
         {
-            TipoResultado Devolver = 0;
-            int resultado = 0; 
+            TipoResultado Devolver;
+            string resultado; 
             Carta cartaUno = this.JugadorUno.Cartas.First();
             Carta cartaDos = this.JugadorDos.Cartas.First();
             if (cartaUno.Tipo == Carta.TipoCarta.Normal && cartaDos.Tipo == Carta.TipoCarta.Normal)
@@ -53,25 +53,36 @@ namespace Juego.Entidades
                 }
                 if (cartaUno.Atributos[atributocantado].Valor < cartaDos.Atributos[atributocantado].Valor)
                 {
-                    resultado = 2;
+                    resultado = "Gano jugador 2";
                 }
                 else
                 {
-                    resultado = 1;
+                    resultado = "Gano jugador 1";
                 }
             }
             else
             {
-                resultado = 0;
+                resultado = "Carta especial";
             }
-            if (resultado == 0)
+            switch (resultado)
             {
-                Devolver = this.ActualizarMazoEspecial();
-            }
-            else
-            {
-                this.ActualizaMazosNormal(resultado);
-                Devolver = TipoResultado.Normal;
+                case "Carta especial":
+                    {
+                        Devolver = this.ActualizarMazoEspecial();
+                    }
+                    break;
+                case "Gano jugador 1":
+                    {
+                        this.ActualizaMazosNormal(1);
+                        Devolver = TipoResultado.Normal;
+                    }
+                    break;
+                default:
+                    {
+                        this.ActualizaMazosNormal(2);
+                        Devolver = TipoResultado.Normal;
+                    }
+                    break;
             }
             return Devolver;
         }
