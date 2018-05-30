@@ -11,11 +11,13 @@ namespace Juego.Entidades
         public Jugador JugadorUno { get; set; }
         public Jugador JugadorDos { get; set; }
         public Mazo Mazo { get; set; }
+        private bool PartidaFinalizada { get; set; }
 
         public Partida(Mazo mazo, Jugador jugador)
         {
             this.Mazo = mazo;
             this.JugadorUno = jugador;
+            this.PartidaFinalizada = false;
         }
 
         public enum TipoResultado 
@@ -25,6 +27,27 @@ namespace Juego.Entidades
             Roja = 2,
             RojaAmarilla = 3,
             Especial = 4
+        }
+
+        private void ActualizarEstadoPartida()
+        {
+            if (this.JugadorUno.Cartas.Count == 0)
+            {
+                this.PartidaFinalizada = true;
+            }
+            if (this.JugadorDos.Cartas.Count == 0)
+            {
+                this.PartidaFinalizada = true;
+            }
+        }
+
+        public void ComenzarJuego()
+        {
+            if (this.Mazo != null && this.JugadorDos != null)
+            {
+                this.Mezclar();
+                this.Repartir();
+            }
         }
 
 
@@ -84,10 +107,12 @@ namespace Juego.Entidades
                     }
                     break;
             }
+
+            this.ActualizarEstadoPartida();
             return Devolver;
         }
 
-        public void ActualizaMazosNormal(int ganador)
+        private void ActualizaMazosNormal(int ganador)
         {
             if (ganador == 1)
             {
@@ -110,7 +135,7 @@ namespace Juego.Entidades
             }
         }
 
-        public TipoResultado ActualizarMazoEspecial()
+        private TipoResultado ActualizarMazoEspecial()
         {
             TipoResultado resultado = 0;
             var CartaUno = this.JugadorUno.Cartas.First();
@@ -190,7 +215,7 @@ namespace Juego.Entidades
             return resultado;
         }
 
-        public void Mezclar()
+        private void Mezclar()
         {
             if (this.Mazo != null && this.JugadorDos != null)
             {
@@ -212,7 +237,7 @@ namespace Juego.Entidades
             }
         }
 
-        public void Repartir()
+        private void Repartir()
         {
             if (this.Mazo != null && this.JugadorDos != null)
             {
