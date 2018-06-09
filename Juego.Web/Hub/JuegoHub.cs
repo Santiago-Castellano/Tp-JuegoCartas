@@ -31,8 +31,8 @@ namespace Juego.Web.Hubs
         {
             var partidanueva = Juego.UnirsePartida(usuario, Context.ConnectionId, partida);
             Clients.All.eliminarPartida(partidanueva.Nombre);
-            Clients.Client(partidanueva.JugadorUno.ConecctionID).dibujarTablero(partidanueva.JugadorUno, partidanueva.JugadorDos, partidanueva.Mazo);
-            Clients.Client(partidanueva.JugadorDos.ConecctionID).dibujarTablero(partidanueva.JugadorUno, partidanueva.JugadorDos, partidanueva.Mazo);
+            Clients.Client(partidanueva.JugadorUno.ConecctionID).dibujarTablero(new { Cartas = partidanueva.JugadorUno.Cartas.Select(x => new { Codigo = x.Codigo, Nombre = x.Nombre }), Nombre = partidanueva.JugadorUno.Nombre }, new { Cartas = partidanueva.JugadorDos.Cartas, Nombre = partidanueva.JugadorDos.Nombre }, new { Nombre = partidanueva.Mazo.Nombre, NombreAtributos = partidanueva.Mazo.NombreAtributos });
+            Clients.Client(partidanueva.JugadorDos.ConecctionID).dibujarTablero(new { Cartas = partidanueva.JugadorUno.Cartas.Select(x => new { Codigo = x.Codigo, Nombre = x.Nombre }), Nombre = partidanueva.JugadorUno.Nombre }, new { Cartas = partidanueva.JugadorDos.Cartas, Nombre = partidanueva.JugadorDos.Nombre }, new { Nombre = partidanueva.Mazo.Nombre, NombreAtributos = partidanueva.Mazo.NombreAtributos });
 
         }
 
