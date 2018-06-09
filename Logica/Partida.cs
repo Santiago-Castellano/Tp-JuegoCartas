@@ -220,13 +220,13 @@ namespace Juego.Entidades
         {
             if (this.Mazo != null && this.JugadorDos != null)
             {
-                for (int i = 0; i < (this.Mazo.Cartas.Count / 2); i++)
+                for (int i = 0; i < 10; i++)
                 {
                     Random random1 = new Random();
                     Random random2 = new Random();
                     int rand1 = random1.Next(0, this.Mazo.Cartas.Count + 1);
                     int rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
-                    while (random1 == random2)
+                    while (rand1 == rand2)
                     {
                         rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
                     }
