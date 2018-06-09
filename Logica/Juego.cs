@@ -23,15 +23,19 @@ namespace Juego.Entidades
         private void LeerMazos()
         {
            var deckFolder = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Mazos");
-           foreach (var deck in deckFolder)
-           {
+            foreach (var deck in deckFolder)
+            {
                 Mazo mazo = new Mazo();
-                
+
                 var lines = File.ReadAllLines(deck + "\\Informacion.txt");
                 mazo.Nombre = lines[0];
                 int contador = 0;
                 char[] delimitador = { '|' };
                 var forma = lines[1].Split(delimitador);
+                for (int i = 2; i < forma.Count(); i++)
+                {
+                    mazo.NombreAtributos.Add(forma[i]);
+                }
                 foreach (var line in lines)
                 {
                     if (contador > 1)
