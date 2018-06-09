@@ -11,6 +11,7 @@ namespace Juego.Entidades
         public Jugador JugadorUno { get; set; }
         public Jugador JugadorDos { get; set; }
         public Mazo Mazo { get; set; }
+        public string Nombre { get; set; }
         private bool PartidaFinalizada { get; set; }
 
         public Partida(Mazo mazo, Jugador jugador)
