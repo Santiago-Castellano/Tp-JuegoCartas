@@ -10,9 +10,12 @@ namespace Juego.Entidades
     {
         public string Nombre { get; set; }
         public List<Carta> Cartas { get; set; }
-        public string conecctionID { get; set; }
+        public string ConecctionID { get; set; }
 
-        
+        public Jugador()
+        {
+            this.Cartas = new List<Carta>();
+        }
 
     }
 }
