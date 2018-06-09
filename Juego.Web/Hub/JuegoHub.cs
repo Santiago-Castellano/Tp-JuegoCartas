@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using Juego.Entidades;
 
+
 namespace Juego.Web.Hubs
 {
     public class JuegoHub : Hub
@@ -13,30 +14,42 @@ namespace Juego.Web.Hubs
 
         public void CrearPartida(string usuario, string partida, string mazo)
         {
+
             // Notifico a los otros usuarios de la nueva partida.
-            //Clients.Others.agregarPartida(nuevaPartida);
+            var aux = Juego.CrearNuevaPartida(usuario, Context.ConnectionId, partida, mazo);
+
+            Clients.Others.agregarPartida(new {
+                Mazo = aux.Mazo.Nombre,
+                Nombre = aux.Nombre,
+                Usuario = aux.JugadorUno.Nombre
+            });
              
-            //Clients.Caller.esperarJugador();
+            Clients.Caller.esperarJugador();
         }
 
         public void UnirsePartida(string usuario, string partida)
         {
-            //Clients.All.eliminarPartida(partidaAUnirse.Nombre);
-
-            //Clients.Client(jugador1.ConnectionId).dibujarTablero(jugador1, jugador2, partidaAUnirse.Mazo);
-            //Clients.Client(jugador2.ConnectionId).dibujarTablero(jugador1, jugador2, partidaAUnirse.Mazo);
+            var partidanueva = Juego.UnirsePartida(usuario, Context.ConnectionId, partida);
+            Clients.All.eliminarPartida(partidanueva.Nombre);
+            Clients.Client(partidanueva.JugadorUno.ConecctionID).dibujarTablero(partidanueva.JugadorUno, partidanueva.JugadorDos, partidanueva.Mazo);
+            Clients.Client(partidanueva.JugadorDos.ConecctionID).dibujarTablero(partidanueva.JugadorUno, partidanueva.JugadorDos, partidanueva.Mazo);
 
         }
 
         public void ObtenerPartidas()
         {
-            //Clients.Caller.agregarPartidas(partidas);
+            Clients.Caller.agregarPartidas(Juego.ObtenerPartidasPendientes().Select(x => new
+            {
+                Mazo = x.Mazo.Nombre,
+                Nombre = x.Nombre,
+                Usuario = x.JugadorUno.Nombre
+            }));
         }
 
         public void ObtenerMazos()
         {
             var mazos = Juego.ObtenerMazos();
-            var mazosstring = mazos.Select(x => x.Nombre).ToList();
+            List<string> mazosstring = mazos.Select(x => x.Nombre).ToList();
             Clients.Caller.agregarMazos(mazosstring);
         }
 
