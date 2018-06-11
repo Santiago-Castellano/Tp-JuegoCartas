@@ -22,7 +22,7 @@ namespace Juego.Entidades
 
         private void LeerMazos()
         {
-           var deckFolder = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Mazos");
+           var deckFolder = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Juego.Web\Mazos");
             foreach (var deck in deckFolder)
             {
                 Mazo mazo = new Mazo();
