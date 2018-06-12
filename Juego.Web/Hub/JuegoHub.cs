@@ -55,23 +55,26 @@ namespace Juego.Web.Hubs
 
         public void Cantar(string idAtributo, string idCarta)
         {
-            //if (jugada.connectionIdGanador == Context.ConnectionId)
-            //{
-            //    Clients.Caller.ganarMano(resultado, false);
-            //    Clients.Client(jugada.connectionIdPerdedor).perderMano(resultado, false);
-            //
-            //}
-            //else
-            //{
-            //    Clients.Client(jugada.connectionIdGanador).ganarMano(resultado, false);
-            //    Clients.Caller.perderMano(resultado, false);
-            //
-            //}
-            //if (jugada.finalizoJuego)
-            //{
-            //    Clients.Caller.ganar();
-            //    Clients.Client(jugada.connectionIdPerdedor).perder();
-            //}
+            var partida = Juego.ObtenerPartida(Context.ConnectionId);
+            var resultado = partida.Cantar(idAtributo, idCarta);
+
+            if (partida.IdGanadorMano == Context.ConnectionId)
+            {
+                Clients.Caller.ganarMano(resultado, false);
+                Clients.Client(partida.IdPerdedorMano).perderMano(resultado, false);
+
+            }
+            else
+            {
+                Clients.Client(partida.IdGanadorMano).ganarMano(resultado, false);
+                Clients.Caller.perderMano(resultado, false);
+
+            }
+            if (partida.EsPartidaFinalizada())
+            {
+                Clients.Caller.ganar();
+                Clients.Client(partida.IdPerdedorMano).perder();
+            }
         }
     }
 }
