@@ -13,6 +13,8 @@ namespace Juego.Entidades
         public Mazo Mazo { get; set; }
         public string Nombre { get; set; }
         private bool PartidaFinalizada { get; set; }
+        public string IdGanadorMano { get; set; }
+        public string IdPerdedorMano { get; set; }
 
         public Partida(Mazo mazo, Jugador jugador)
         {
@@ -29,6 +31,11 @@ namespace Juego.Entidades
             RojaAmarilla = 3,
             Especial = 4
         }
+        public bool EsPartidaFinalizada()
+        {
+            return this.PartidaFinalizada;
+        }
+
 
         private void ActualizarEstadoPartida()
         {
@@ -51,6 +58,51 @@ namespace Juego.Entidades
             }
         }
 
+        private int DeterminaAtributo(Carta carta, string atributoseleccionado)
+        {
+            List<string> nombresDeAtributos = new List<string>();
+            foreach (Atributo item in carta.Atributos)
+            {
+                nombresDeAtributos.Add(item.Nombre);
+            }
+            int atributocantado = 0;
+            int cont = 0;
+            foreach (string item in nombresDeAtributos)
+            {
+                if (atributoseleccionado == item)
+                {
+                    atributocantado = cont;
+                }
+                cont += cont;
+            }
+            return atributocantado;
+        }
+
+        private string CompararCartas(Carta cartauno, Carta cartados, int atributo)
+        {
+            string resultado;
+            if (cartauno.Tipo == Carta.TipoCarta.Normal && cartados.Tipo == Carta.TipoCarta.Normal)
+            {
+                if (cartauno.Atributos[atributo].Valor < cartados.Atributos[atributo].Valor)
+                {
+                    resultado = "Gano jugador 2";
+                    this.IdGanadorMano = this.JugadorDos.ConecctionID;
+                    this.IdPerdedorMano = this.JugadorUno.ConecctionID;
+                }
+                else
+                {
+                    resultado = "Gano jugador 1";
+                    this.IdGanadorMano = this.JugadorUno.ConecctionID;
+                    this.IdPerdedorMano = this.JugadorDos.ConecctionID;
+                }
+            }
+            else
+            {
+                resultado = "Carta especial";
+            }
+            return resultado;
+        }
+
 
         public TipoResultado Cantar(string atributoseleccionado, string codigocarta) //ver como hacer control de la carta
         {
@@ -58,36 +110,9 @@ namespace Juego.Entidades
             string resultado; 
             Carta cartaUno = this.JugadorUno.Cartas.First();
             Carta cartaDos = this.JugadorDos.Cartas.First();
-            if (cartaUno.Tipo == Carta.TipoCarta.Normal && cartaDos.Tipo == Carta.TipoCarta.Normal)
-            {
-                List<string> nombresDeAtributos = new List<string>();
-                foreach (Atributo item in cartaUno.Atributos)
-                {
-                    nombresDeAtributos.Add(item.Nombre);
-                }
-                int atributocantado = 0;
-                int cont = 0;
-                foreach (string item in nombresDeAtributos)
-                {
-                    if (atributoseleccionado == item)
-                    {
-                        atributocantado = cont;
-                    }
-                    cont += cont;
-                }
-                if (cartaUno.Atributos[atributocantado].Valor < cartaDos.Atributos[atributocantado].Valor)
-                {
-                    resultado = "Gano jugador 2";
-                }
-                else
-                {
-                    resultado = "Gano jugador 1";
-                }
-            }
-            else
-            {
-                resultado = "Carta especial";
-            }
+            int atributocantado = this.DeterminaAtributo(cartaUno, atributoseleccionado);
+            resultado = this.CompararCartas(cartaUno,cartaDos,atributocantado);
+            
             switch (resultado)
             {
                 case "Carta especial":
@@ -220,20 +245,43 @@ namespace Juego.Entidades
         {
             if (this.Mazo != null && this.JugadorDos != null)
             {
-                for (int i = 0; i < 10; i++)
+                Random random = new Random();
+                int rand = -1;
+                List<int> orden = new List<int>();
+                bool Existe = false;
+                for (int i = 0; i < this.Mazo.Cartas.Count; i++)
                 {
-                    Random random1 = new Random();
-                    Random random2 = new Random();
-                    int rand1 = random1.Next(0, this.Mazo.Cartas.Count + 1);
-                    int rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
-                    while (rand1 == rand2)
+                    rand = random.Next(0, this.Mazo.Cartas.Count);
+                    Existe = false;
+                    while (Existe == false)
                     {
-                        rand2 = random2.Next(0, this.Mazo.Cartas.Count + 1);
+                        foreach (var item in orden)
+                        {
+                            if (rand == item)
+                            {
+                                Existe = true;
+                            }
+                        }
+                        if (Existe == false)
+                        {
+                            orden.Add(rand);
+                            Existe = true;
+                        }
+                        else
+                        {
+                            rand = random.Next(0, this.Mazo.Cartas.Count);
+                            Existe = false;
+                        }
                     }
-                    Carta aux = new Carta();
-                    aux = this.Mazo.Cartas[rand1];
-                    this.Mazo.Cartas[rand1] = this.Mazo.Cartas[rand2];
-                    this.Mazo.Cartas[rand2] = aux;
+
+                    foreach (var item in orden)
+                    {
+                        var reacomodado = this.Mazo.Cartas[item];
+                        this.Mazo.Cartas.Remove(reacomodado);
+                        this.Mazo.Cartas.Add(reacomodado);
+                    }
+
+
                 }
             }
         }
