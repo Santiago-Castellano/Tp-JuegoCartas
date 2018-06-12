@@ -115,5 +115,15 @@ namespace Juego.Entidades
         {
             return this.Mazos;
         }
+
+        public Partida ObtenerPartida(string idjugador)
+        {
+            Partida devolver = this.Partidas.SingleOrDefault(x => x.JugadorUno.ConecctionID == idjugador);
+            if (devolver == null)
+            {
+                devolver = this.Partidas.SingleOrDefault(x => x.JugadorDos.ConecctionID == idjugador);
+            }
+            return devolver;
+        }
     }
 }
