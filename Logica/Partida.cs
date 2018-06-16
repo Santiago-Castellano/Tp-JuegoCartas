@@ -23,13 +23,17 @@ namespace Juego.Entidades
             this.PartidaFinalizada = false;
         }
 
+        public enum ResultadoMano
+        {
+            Ganojugador1,
+            Ganojugador2,
+            CartaEspecial
+        }
         public enum TipoResultado 
         {
             Normal = 0,
             Amarilla = 1,
-            Roja = 2,
-            RojaAmarilla = 3,
-            Especial = 4
+            Roja = 2
         }
         public bool EsPartidaFinalizada()
         {
@@ -58,7 +62,7 @@ namespace Juego.Entidades
             }
         }
 
-        private int DeterminaAtributo(Carta carta, string atributoseleccionado)
+        private int DeterminaPosicionAtributo(Carta carta, string atributoseleccionado)
         {
             List<string> nombresDeAtributos = new List<string>();
             foreach (Atributo item in carta.Atributos)
@@ -78,57 +82,76 @@ namespace Juego.Entidades
             return atributocantado;
         }
 
-        private string CompararCartas(Carta cartauno, Carta cartados, int atributo)
+        private ResultadoMano CompararCartas(Carta cartauno, Carta cartados, int atributo)
         {
-            string resultado;
+            ResultadoMano resultado;
             if (cartauno.Tipo == Carta.TipoCarta.Normal && cartados.Tipo == Carta.TipoCarta.Normal)
             {
                 if (cartauno.Atributos[atributo].Valor < cartados.Atributos[atributo].Valor)
                 {
-                    resultado = "Gano jugador 2";
+                    resultado = ResultadoMano.Ganojugador2;
                     this.IdGanadorMano = this.JugadorDos.ConecctionID;
                     this.IdPerdedorMano = this.JugadorUno.ConecctionID;
                 }
                 else
                 {
-                    resultado = "Gano jugador 1";
+                    resultado = ResultadoMano.Ganojugador1;
                     this.IdGanadorMano = this.JugadorUno.ConecctionID;
                     this.IdPerdedorMano = this.JugadorDos.ConecctionID;
                 }
             }
             else
             {
-                resultado = "Carta especial";
+                resultado = ResultadoMano.CartaEspecial;
             }
             return resultado;
         }
 
+        private List<Carta> BuscaLasCartas(string codigo)
+        {
+            List<Carta> ListaDeCartas = new List<Carta>();
+            Carta cartaUno = this.JugadorUno.Cartas.SingleOrDefault(x => x.Codigo == codigo);
+            if (cartaUno == null)
+            {
+                cartaUno = this.JugadorUno.Cartas.First();
+            }
+            Carta cartaDos = this.JugadorDos.Cartas.SingleOrDefault(x => x.Codigo == codigo);
+            if (cartaDos == null)
+            {
+                cartaDos = this.JugadorDos.Cartas.First();
+            }
+            ListaDeCartas.Add(cartaUno);
+            ListaDeCartas.Add(cartaDos);
+            return ListaDeCartas;
+        }
 
-        public TipoResultado Cantar(string atributoseleccionado, string codigocarta) //ver como hacer control de la carta
+        public TipoResultado Cantar(string atributoseleccionado, string codigocarta)
         {
             TipoResultado Devolver;
-            string resultado; 
-            Carta cartaUno = this.JugadorUno.Cartas.First();
-            Carta cartaDos = this.JugadorDos.Cartas.First();
-            int atributocantado = this.DeterminaAtributo(cartaUno, atributoseleccionado);
+            ResultadoMano resultado;
+            var Cartas = this.BuscaLasCartas(codigocarta);
+            Carta cartaUno = Cartas.First();
+            Carta cartaDos = Cartas.Last();
+            
+            int atributocantado = this.DeterminaPosicionAtributo(cartaUno, atributoseleccionado);
             resultado = this.CompararCartas(cartaUno,cartaDos,atributocantado);
             
             switch (resultado)
             {
-                case "Carta especial":
+                case ResultadoMano.CartaEspecial:
                     {
-                        Devolver = this.ActualizarMazoEspecial();
+                        Devolver = this.ActualizarMazoEspecial(cartaUno,cartaDos);
                     }
                     break;
-                case "Gano jugador 1":
+                case ResultadoMano.Ganojugador1:
                     {
-                        this.ActualizaMazosNormal(1);
+                        this.ActualizaMazosNormal(1,cartaUno,cartaDos);
                         Devolver = TipoResultado.Normal;
                     }
                     break;
                 default:
                     {
-                        this.ActualizaMazosNormal(2);
+                        this.ActualizaMazosNormal(2,cartaUno,cartaDos);
                         Devolver = TipoResultado.Normal;
                     }
                     break;
@@ -138,106 +161,78 @@ namespace Juego.Entidades
             return Devolver;
         }
 
-        private void ActualizaMazosNormal(int ganador)
+        private void ActualizaMazosNormal(int ganador, Carta cartauno, Carta cartados)
         {
+            
+            this.JugadorDos.Cartas.Remove(cartados);
+            this.JugadorUno.Cartas.Remove(cartauno);
             if (ganador == 1)
             {
-                var aux = this.JugadorUno.Cartas.First();
-                var aux2 = this.JugadorDos.Cartas.First();
-                this.JugadorUno.Cartas.RemoveAt(0);
-                this.JugadorUno.Cartas.Add(aux);
-                this.JugadorDos.Cartas.RemoveAt(0);
-                this.JugadorUno.Cartas.Add(aux2);
-
+                this.JugadorUno.Cartas.Add(cartauno);
+                this.JugadorUno.Cartas.Add(cartados);
             }
             if (ganador == 2)
             {
-                var aux = this.JugadorDos.Cartas.First();
-                this.JugadorDos.Cartas.RemoveAt(0);
-                this.JugadorDos.Cartas.Add(aux);
-                aux = this.JugadorUno.Cartas.First();
-                this.JugadorUno.Cartas.RemoveAt(0);
-                this.JugadorDos.Cartas.Add(aux);
+                this.JugadorDos.Cartas.Add(cartados);
+                this.JugadorDos.Cartas.Add(cartauno);
             }
         }
 
-        private TipoResultado ActualizarMazoEspecial()
+        private TipoResultado ActualizarMazoEspecial(Carta cartauno, Carta cartados)
         {
             TipoResultado resultado = 0;
-            var CartaUno = this.JugadorUno.Cartas.First();
-            var CartaDos = this.JugadorDos.Cartas.First();
-            if (CartaDos.Tipo != Carta.TipoCarta.Especial & CartaUno.Tipo != Carta.TipoCarta.Especial)
+            this.JugadorUno.Cartas.Remove(cartauno);
+            this.JugadorDos.Cartas.Remove(cartados);
+            switch (cartauno.Tipo)
             {
-                if (CartaUno.Tipo == Carta.TipoCarta.Roja)
-                {
-                    if (CartaDos.Tipo == Carta.TipoCarta.Amarilla)
+                case Carta.TipoCarta.Roja:
                     {
-                        this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.RemoveAt(0);
+                        JugadorUno.Cartas.Add(cartados);
                         var aux = this.JugadorDos.Cartas.First();
-                        this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.Add(aux);
-                        resultado = TipoResultado.RojaAmarilla;
-                    }
-                    if (CartaDos.Tipo == Carta.TipoCarta.Normal)
-                    {
-                        this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.Add(CartaDos);
-                        var aux = this.JugadorDos.Cartas.First();
-                        this.JugadorDos.Cartas.RemoveAt(0);
+                        this.JugadorDos.Cartas.Remove(aux);
                         this.JugadorUno.Cartas.Add(aux);
                         resultado = TipoResultado.Roja;
+                        return resultado;
                     }
-                }
+                    break;
+                case Carta.TipoCarta.Amarilla:
+                    {
+                        if (cartados.Tipo != Carta.TipoCarta.Roja)
+                        {
+                            JugadorUno.Cartas.Add(cartados);
+                            resultado = TipoResultado.Amarilla;
+                            return resultado;
+                        }
+                    }
+                    break;
+                
+            }
 
-                if (CartaDos.Tipo == Carta.TipoCarta.Roja)
-                {
-                    if (CartaUno.Tipo == Carta.TipoCarta.Amarilla)
+            switch (cartados.Tipo)
+            {
+                case Carta.TipoCarta.Roja:
                     {
-                        this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.RemoveAt(0);
+                        JugadorDos.Cartas.Add(cartauno);
                         var aux = this.JugadorUno.Cartas.First();
-                        this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.Add(aux);
-                        resultado = TipoResultado.RojaAmarilla;
-                    }
-                    if (CartaUno.Tipo == Carta.TipoCarta.Normal)
-                    {
-                        this.JugadorDos.Cartas.RemoveAt(0);
-                        this.JugadorUno.Cartas.RemoveAt(0);
-                        this.JugadorDos.Cartas.Add(CartaUno);
-                        var aux = this.JugadorUno.Cartas.First();
-                        this.JugadorUno.Cartas.RemoveAt(0);
+                        this.JugadorUno.Cartas.Remove(aux);
                         this.JugadorDos.Cartas.Add(aux);
                         resultado = TipoResultado.Roja;
+                        return resultado;
                     }
-                }
+                    break;
+                case Carta.TipoCarta.Amarilla:
+                    {
+                        if (cartauno.Tipo != Carta.TipoCarta.Roja)
+                        {
+                            JugadorDos.Cartas.Add(cartauno);
+                            resultado = TipoResultado.Amarilla;
+                            return resultado;
+                        }
+                    }
+                    break;
+ 
             }
-            else
-            {
-                resultado = TipoResultado.Especial;
-                if (CartaUno.Tipo == Carta.TipoCarta.Especial)
-                {
-                    this.JugadorDos.Cartas.RemoveAt(0);
-                    this.JugadorDos.Cartas.Add(CartaDos);
-                    var aux = this.JugadorDos.Cartas.Where(x => x.Codigo != "Hola").ToList();
-                    aux.OrderBy(x => x.Atributos.First());
-                    var mayor = aux.First();
-                    this.JugadorDos.Cartas.Remove(mayor);
-                    this.JugadorUno.Cartas.Add(mayor);
-                }
-                if (CartaDos.Tipo == Carta.TipoCarta.Especial)
-                {
-                    this.JugadorUno.Cartas.RemoveAt(0);
-                    this.JugadorUno.Cartas.Add(CartaUno);
-                    var aux = this.JugadorUno.Cartas.Where(x => x.Codigo !=  "Hola").ToList();
-                    aux.OrderBy(x => x.Atributos.First());
-                    var mayor = aux.First();
-                    this.JugadorUno.Cartas.Remove(mayor);
-                    this.JugadorDos.Cartas.Add(mayor);   
-                }
-            }
+
             return resultado;
         }
 
