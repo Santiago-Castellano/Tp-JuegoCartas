@@ -60,14 +60,54 @@ namespace Juego.Web.Hubs
 
             if (partida.IdGanadorMano == Context.ConnectionId)
             {
-                Clients.Caller.ganarMano(resultado, false);
-                Clients.Client(partida.IdPerdedorMano).perderMano(resultado, false);
+                switch (resultado)
+                {
+                    case Partida.TipoResultado.Normal:
+                        {
+                            Clients.Caller.ganarMano();
+                            Clients.Client(partida.IdPerdedorMano).perderMano();
+                        }
+                        break;
+                    case Partida.TipoResultado.Amarilla:
+                        {
+                            Clients.Caller.ganarManoPorTarjetaAmarilla();
+                            Clients.Client(partida.IdPerdedorMano).perderManoPorTarjetaAmarilla();
+                        }
+                        break;
+                    case Partida.TipoResultado.Roja:
+                        {
+                            Clients.Caller.ganarManoPorTarjetaRoja();
+                            Clients.Client(partida.IdPerdedorMano).perderManoPorTarjetaRoja();
+                        }
+                        break;
+                }
+                
 
             }
             else
             {
-                Clients.Client(partida.IdGanadorMano).ganarMano(resultado, false);
-                Clients.Caller.perderMano(resultado, false);
+                switch (resultado)
+                {
+                    case Partida.TipoResultado.Normal:
+                        {
+                            Clients.Client(partida.IdGanadorMano).ganarMano();
+                            Clients.Caller.perderMano();
+                        }
+                        break;
+                    case Partida.TipoResultado.Amarilla:
+                        {
+                            Clients.Client(partida.IdGanadorMano).ganarManoPorTarjetaAmarilla();
+                            Clients.Caller.perderManoPorTarjetaAmarilla();
+                        }
+                        break;
+                    case Partida.TipoResultado.Roja:
+                        {
+                            Clients.Client(partida.IdGanadorMano).ganarManoPorTarjetaRoja();
+                            Clients.Caller.perderManoPorTarjetaRoja();
+                        }
+                        break;
+                }
+                
 
             }
             if (partida.EsPartidaFinalizada())
