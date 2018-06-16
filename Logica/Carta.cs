@@ -12,8 +12,7 @@ namespace Juego.Entidades
         {
             Roja,
             Amarilla,
-            Normal,
-            Especial
+            Normal
         }
             
         public List<Atributo> Atributos { get; set; }  
