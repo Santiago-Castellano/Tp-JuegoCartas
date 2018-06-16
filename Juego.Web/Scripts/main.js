@@ -2,7 +2,90 @@ var baraja = {},
     baraja2 = {},
     backCard = {};
 var ganoMano = true;
+function ganarManoPorTarjeta(roja) {
+    deshabilitarJuego();
+    baraja2.rotateCard();
 
+    baraja.setWinner();
+    baraja.remove();
+
+    setTimeout(function () {
+        var wonCard = baraja2.remove();
+
+        setTimeout(function () {
+            baraja.addWonCard(wonCard, true);
+            setTimeout(function () {
+                ganoMano = true;
+                mostrarCartasJugador2();
+
+                if (roja) {
+                    ganarManoPorTarjetaExtra();
+                } else {
+                    habilitarJuego();
+                }
+
+            }, 1500);
+        }, 1500);
+    }, 2000);
+};
+
+function ganarManoPorTarjetaExtra() {
+    deshabilitarJuego();
+
+    setTimeout(function () {
+        var wonCard = baraja2.remove();
+
+        setTimeout(function () {
+            baraja.addWonCard(wonCard, true);
+            setTimeout(function () {
+                ganoMano = true;
+                mostrarCartasJugador2();
+                habilitarJuego();
+            }, 1500);
+        }, 1500);
+    }, 2000);
+};
+function perderManoPorTarjeta(roja) {
+    deshabilitarJuego();
+    baraja2.rotateCard();
+
+    baraja2.setWinner();
+    baraja2.remove();
+
+    setTimeout(function () {
+        var wonCard = baraja.remove();
+
+        setTimeout(function () {
+            baraja2.addWonCard(wonCard, false);
+            setTimeout(function () {
+                ganoMano = false;
+                mostrarCartasJugador2();
+                if (roja) {
+                    perderManoPorTarjetaExtra();
+                } else {
+                    deshabilitarJuego();
+                }
+            }, 1500);
+        }, 1500);
+    }, 2000);
+};
+
+function perderManoPorTarjetaExtra() {
+    deshabilitarJuego();
+
+    setTimeout(function () {
+        var wonCard = baraja.remove();
+
+        setTimeout(function () {
+            baraja2.addWonCard(wonCard, false);
+            setTimeout(function () {
+                ganoMano = false;
+                mostrarCartasJugador2();
+                deshabilitarJuego();
+            }, 1500);
+        }, 1500);
+    }, 2000);
+};
 function ganarMano() {
     deshabilitarJuego();
     baraja2.rotateCard();

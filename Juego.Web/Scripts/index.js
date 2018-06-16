@@ -52,6 +52,22 @@ $(function () {
     juego.client.perder = function () {
         perderJuego();
     };
+    juego.client.perderManoPorTarjetaAmarilla = function () {
+        perderManoPorTarjeta(false);
+        deshabilitarJuego();
+    };
+
+    juego.client.perderManoPorTarjetaRoja = function () {
+        perderManoPorTarjeta(true);
+        deshabilitarJuego();
+    };
+    juego.client.ganarManoPorTarjetaAmarilla = function () {
+        ganarManoPorTarjeta(false);
+    };
+
+    juego.client.ganarManoPorTarjetaRoja = function () {
+        ganarManoPorTarjeta(true);
+    };
 
     juego.client.ganarMano = function () {
         ganarMano();
