@@ -26,7 +26,18 @@ namespace Juego.Entidades
             foreach (var deck in deckFolder)
             {
                 Mazo mazo = new Mazo();
-
+                Carta roja = new Carta();
+                roja.Atributos.Add(new Atributo() { Nombre = "Cantar" });
+                roja.Tipo = Carta.TipoCarta.Roja;
+                roja.Nombre = "ROJA";
+                roja.Codigo = "roja";
+                Carta amarilla = new Carta();
+                amarilla.Atributos.Add(new Atributo() { Nombre = "Cantar" });
+                amarilla.Tipo = Carta.TipoCarta.Amarilla;
+                amarilla.Nombre = "AMARILLA";
+                amarilla.Codigo = "amarilla";
+                mazo.Cartas.Add(roja);
+                mazo.Cartas.Add(amarilla);
                 var lines = File.ReadAllLines(deck + "\\Informacion.txt");
                 mazo.Nombre = lines[0];
                 int contador = 0;
@@ -49,9 +60,12 @@ namespace Juego.Entidades
                         };
                         this.AgregaAtributo(carta, aux, forma);
                         mazo.Cartas.Add(carta);
+                        
                     }
                     contador += 1;
                 }
+
+                
                 Mazos.Add(mazo);
             }
         }
