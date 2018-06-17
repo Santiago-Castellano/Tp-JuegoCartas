@@ -192,6 +192,8 @@ namespace Juego.Entidades
                         this.JugadorDos.Cartas.Remove(aux);
                         this.JugadorUno.Cartas.Add(aux);
                         resultado = TipoResultado.Roja;
+                        this.IdGanadorMano = this.JugadorUno.ConecctionID;
+                        this.IdPerdedorMano = this.JugadorDos.ConecctionID;
                         return resultado;
                     }
                     break;
@@ -201,6 +203,8 @@ namespace Juego.Entidades
                         {
                             JugadorUno.Cartas.Add(cartados);
                             resultado = TipoResultado.Amarilla;
+                            this.IdGanadorMano = this.JugadorUno.ConecctionID;
+                            this.IdPerdedorMano = this.JugadorDos.ConecctionID;
                             return resultado;
                         }
                     }
@@ -217,6 +221,8 @@ namespace Juego.Entidades
                         this.JugadorUno.Cartas.Remove(aux);
                         this.JugadorDos.Cartas.Add(aux);
                         resultado = TipoResultado.Roja;
+                        this.IdGanadorMano = this.JugadorDos.ConecctionID;
+                        this.IdPerdedorMano = this.JugadorUno.ConecctionID;
                         return resultado;
                     }
                     break;
@@ -226,6 +232,8 @@ namespace Juego.Entidades
                         {
                             JugadorDos.Cartas.Add(cartauno);
                             resultado = TipoResultado.Amarilla;
+                            this.IdGanadorMano = this.JugadorDos.ConecctionID;
+                            this.IdPerdedorMano = this.JugadorUno.ConecctionID;
                             return resultado;
                         }
                     }
