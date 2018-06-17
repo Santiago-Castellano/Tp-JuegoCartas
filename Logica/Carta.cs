@@ -14,8 +14,8 @@ namespace Juego.Entidades
             Amarilla,
             Normal
         }
-            
-        public List<Atributo> Atributos { get; set; }  
+
+        public List<Atributo> Atributos { get; set; }
         public TipoCarta Tipo { get; set; }
         public string Codigo { get; set; }
         public string Nombre { get; set; }

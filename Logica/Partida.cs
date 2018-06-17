@@ -16,6 +16,8 @@ namespace Juego.Entidades
         public string IdGanadorMano { get; set; }
         public string IdPerdedorMano { get; set; }
 
+
+
         public Partida(Mazo mazo, Jugador jugador)
         {
             this.Mazo = mazo;
@@ -29,7 +31,7 @@ namespace Juego.Entidades
             Ganojugador2,
             CartaEspecial
         }
-        public enum TipoResultado 
+        public enum TipoResultado
         {
             Normal = 0,
             Amarilla = 1,
@@ -132,26 +134,26 @@ namespace Juego.Entidades
             var Cartas = this.BuscaLasCartas(codigocarta);
             Carta cartaUno = Cartas.First();
             Carta cartaDos = Cartas.Last();
-            
+
             int atributocantado = this.DeterminaPosicionAtributo(cartaUno, atributoseleccionado);
-            resultado = this.CompararCartas(cartaUno,cartaDos,atributocantado);
-            
+            resultado = this.CompararCartas(cartaUno, cartaDos, atributocantado);
+
             switch (resultado)
             {
                 case ResultadoMano.CartaEspecial:
                     {
-                        Devolver = this.ActualizarMazoEspecial(cartaUno,cartaDos);
+                        Devolver = this.ActualizarMazoEspecial(cartaUno, cartaDos);
                     }
                     break;
                 case ResultadoMano.Ganojugador1:
                     {
-                        this.ActualizaMazosNormal(1,cartaUno,cartaDos);
+                        this.ActualizaMazosNormal(1, cartaUno, cartaDos);
                         Devolver = TipoResultado.Normal;
                     }
                     break;
                 default:
                     {
-                        this.ActualizaMazosNormal(2,cartaUno,cartaDos);
+                        this.ActualizaMazosNormal(2, cartaUno, cartaDos);
                         Devolver = TipoResultado.Normal;
                     }
                     break;
@@ -163,7 +165,7 @@ namespace Juego.Entidades
 
         private void ActualizaMazosNormal(int ganador, Carta cartauno, Carta cartados)
         {
-            
+
             this.JugadorDos.Cartas.Remove(cartados);
             this.JugadorUno.Cartas.Remove(cartauno);
             if (ganador == 1)
@@ -209,7 +211,7 @@ namespace Juego.Entidades
                         }
                     }
                     break;
-                
+
             }
 
             switch (cartados.Tipo)
@@ -238,7 +240,7 @@ namespace Juego.Entidades
                         }
                     }
                     break;
- 
+
             }
 
             return resultado;

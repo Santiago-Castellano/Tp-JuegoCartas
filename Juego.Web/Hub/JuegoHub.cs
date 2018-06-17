@@ -18,12 +18,13 @@ namespace Juego.Web.Hubs
             // Notifico a los otros usuarios de la nueva partida.
             var aux = Juego.CrearNuevaPartida(usuario, Context.ConnectionId, partida, mazo);
 
-            Clients.Others.agregarPartida(new {
+            Clients.Others.agregarPartida(new
+            {
                 Mazo = aux.Mazo.Nombre,
                 Nombre = aux.Nombre,
                 Usuario = aux.JugadorUno.Nombre
             });
-             
+
             Clients.Caller.esperarJugador();
         }
 
@@ -82,7 +83,7 @@ namespace Juego.Web.Hubs
                         }
                         break;
                 }
-                
+
 
             }
             else
@@ -109,7 +110,7 @@ namespace Juego.Web.Hubs
                         }
                         break;
                 }
-                
+
 
             }
             if (partida.EsPartidaFinalizada())
