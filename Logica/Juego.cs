@@ -9,35 +9,24 @@ namespace Juego.Entidades
 {
     public class Juego
     {
-        private List <Partida> Partidas { get; set; }
-        private List <Mazo> Mazos { get; set; }
+        private List<Partida> Partidas { get; set; }
+        private List<Mazo> Mazos { get; set; }
 
         public Juego()
         {
             this.Partidas = new List<Partida>();
             this.Mazos = new List<Mazo>();
             this.LeerMazos();
-            
+
         }
 
         private void LeerMazos()
         {
-           var deckFolder = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Juego.Web\Mazos");
+            var deckFolder = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Juego.Web\Mazos");
             foreach (var deck in deckFolder)
             {
                 Mazo mazo = new Mazo();
-                Carta roja = new Carta();
-                roja.Atributos.Add(new Atributo() { Nombre = "Cantar" });
-                roja.Tipo = Carta.TipoCarta.Roja;
-                roja.Nombre = "ROJA";
-                roja.Codigo = "roja";
-                Carta amarilla = new Carta();
-                amarilla.Atributos.Add(new Atributo() { Nombre = "Cantar" });
-                amarilla.Tipo = Carta.TipoCarta.Amarilla;
-                amarilla.Nombre = "AMARILLA";
-                amarilla.Codigo = "amarilla";
-                mazo.Cartas.Add(roja);
-                mazo.Cartas.Add(amarilla);
+                this.AgregaCartasEspecialesAlMazo(mazo);
                 var lines = File.ReadAllLines(deck + "\\Informacion.txt");
                 mazo.Nombre = lines[0];
                 int contador = 0;
@@ -58,32 +47,48 @@ namespace Juego.Entidades
                             Codigo = aux[0],
                             Tipo = Carta.TipoCarta.Normal
                         };
-                        this.AgregaAtributo(carta, aux, forma);
+                        this.AgregaAtributosAUnaCarta(carta, aux, forma);
                         mazo.Cartas.Add(carta);
-                        
+
                     }
                     contador += 1;
                 }
 
-                
+
                 Mazos.Add(mazo);
             }
         }
 
-        public Partida UnirsePartida(string nombrejugador, string coneccionjugador,string nombrepartida)
+        private void AgregaCartasEspecialesAlMazo(Mazo mazo)
         {
-            Jugador jugadornuevo = new Jugador() {Nombre = nombrejugador, ConecctionID = coneccionjugador };
+            Carta roja = new Carta();
+            roja.Atributos.Add(new Atributo() { Nombre = "Cantar" });
+            roja.Tipo = Carta.TipoCarta.Roja;
+            roja.Nombre = "ROJA";
+            roja.Codigo = "roja";
+            Carta amarilla = new Carta();
+            amarilla.Atributos.Add(new Atributo() { Nombre = "Cantar" });
+            amarilla.Tipo = Carta.TipoCarta.Amarilla;
+            amarilla.Nombre = "AMARILLA";
+            amarilla.Codigo = "amarilla";
+            mazo.Cartas.Add(roja);
+            mazo.Cartas.Add(amarilla);
+        }
+
+        public Partida UnirsePartida(string nombrejugador, string coneccionjugador, string nombrepartida)
+        {
+            Jugador jugadornuevo = new Jugador() { Nombre = nombrejugador, ConecctionID = coneccionjugador };
             var partida = this.Partidas.SingleOrDefault(x => x.Nombre == nombrepartida);
             partida.JugadorDos = jugadornuevo;
             partida.ComenzarJuego();
             return partida;
         }
 
-        public Partida CrearNuevaPartida(string jugadorunonombre,string jugadorunoconeccion, string nombrepartida, string nombremazo)
+        public Partida CrearNuevaPartida(string jugadorunonombre, string jugadorunoconeccion, string nombrepartida, string nombremazo)
         {
             var mazoseleccionado = this.Mazos.SingleOrDefault(x => x.Nombre == nombremazo);
-            var NuevoJugador = new Jugador() {Nombre = jugadorunonombre, ConecctionID = jugadorunoconeccion };
-            Partida partida = new Partida(mazoseleccionado, NuevoJugador) {Nombre = nombrepartida };
+            var NuevoJugador = new Jugador() { Nombre = jugadorunonombre, ConecctionID = jugadorunoconeccion };
+            Partida partida = new Partida(mazoseleccionado, NuevoJugador) { Nombre = nombrepartida };
             partida.JugadorUno = NuevoJugador;
             Partidas.Add(partida);
             return partida;
@@ -96,7 +101,7 @@ namespace Juego.Entidades
             this.Partidas.Remove(partidaeliminar);
         }
 
-        private void AgregaAtributo(Carta carta, string[] linea, string[] formadeatributos)
+        private void AgregaAtributosAUnaCarta(Carta carta, string[] linea, string[] formadeatributos)
         {
             for (int i = 0; i < linea.Count(); i++)
             {
@@ -115,13 +120,7 @@ namespace Juego.Entidades
         public List<Partida> ObtenerPartidasPendientes()
         {
             List<Partida> partidasPendientes = new List<Partida>();
-            foreach (Partida item in this.Partidas)
-            {
-                if (item.JugadorDos == null)
-                {
-                    partidasPendientes.Add(item);
-                }
-            }
+            partidasPendientes = this.Partidas.Where(x => x.JugadorDos == null).ToList();
             return partidasPendientes;
         }
 
