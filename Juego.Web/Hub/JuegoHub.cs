@@ -71,13 +71,14 @@ namespace Juego.Web.Hubs
                     case Partida.TipoResultado.Amarilla:
                         {
                             Clients.Caller.ganarManoPorTarjetaAmarilla();
-                            Clients.Client(partida.IdPerdedorMano).perderManoPorTarjetaAmarilla();
+                            Clients.Client(partida.IdPerdedorMano).perderMano();
                         }
                         break;
                     case Partida.TipoResultado.Roja:
                         {
                             Clients.Caller.ganarManoPorTarjetaRoja();
-                            Clients.Client(partida.IdPerdedorMano).perderManoPorTarjetaRoja();
+                            Clients.Client(partida.IdPerdedorMano).perderMano();
+                            Clients.Client(partida.IdPerdedorMano).perderMano();
                         }
                         break;
                 }
@@ -97,13 +98,14 @@ namespace Juego.Web.Hubs
                     case Partida.TipoResultado.Amarilla:
                         {
                             Clients.Client(partida.IdGanadorMano).ganarManoPorTarjetaAmarilla();
-                            Clients.Caller.perderManoPorTarjetaAmarilla();
+                            Clients.Caller.perderMano();
                         }
                         break;
                     case Partida.TipoResultado.Roja:
                         {
                             Clients.Client(partida.IdGanadorMano).ganarManoPorTarjetaRoja();
-                            Clients.Caller.perderManoPorTarjetaRoja();
+                            Clients.Caller.perderMano();
+                            Clients.Caller.perderMano();
                         }
                         break;
                 }
