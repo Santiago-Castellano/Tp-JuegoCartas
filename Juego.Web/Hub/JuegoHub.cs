@@ -57,7 +57,7 @@ namespace Juego.Web.Hubs
         public void Cantar(string idAtributo, string idCarta)
         {
             var partida = Juego.ObtenerPartida(Context.ConnectionId);
-            var resultado = partida.Cantar(idAtributo, idCarta);
+            var resultado = partida.Cantar(idAtributo);
 
             if (partida.IdGanadorMano == Context.ConnectionId)
             {
@@ -72,14 +72,14 @@ namespace Juego.Web.Hubs
                     case Partida.TipoResultado.Amarilla:
                         {
                             Clients.Caller.ganarManoPorTarjetaAmarilla();
-                            Clients.Client(partida.IdPerdedorMano).perderMano();
+                            Clients.Client(partida.IdPerdedorMano).perderManoPorTarjetaAmarilla();
                         }
                         break;
                     case Partida.TipoResultado.Roja:
                         {
                             Clients.Caller.ganarManoPorTarjetaRoja();
-                            Clients.Client(partida.IdPerdedorMano).perderMano();
-                            Clients.Client(partida.IdPerdedorMano).perderMano();
+                            Clients.Client(partida.IdPerdedorMano).perderManoPorTarjetaRoja();
+                            
                         }
                         break;
                 }
@@ -99,14 +99,14 @@ namespace Juego.Web.Hubs
                     case Partida.TipoResultado.Amarilla:
                         {
                             Clients.Client(partida.IdGanadorMano).ganarManoPorTarjetaAmarilla();
-                            Clients.Caller.perderMano();
+                            Clients.Caller.perderManoPorTarjetaAmarilla();
                         }
                         break;
                     case Partida.TipoResultado.Roja:
                         {
                             Clients.Client(partida.IdGanadorMano).ganarManoPorTarjetaRoja();
-                            Clients.Caller.perderMano();
-                            Clients.Caller.perderMano();
+                            Clients.Caller.perderManoPorTarjetaRoja();
+                            
                         }
                         break;
                 }
