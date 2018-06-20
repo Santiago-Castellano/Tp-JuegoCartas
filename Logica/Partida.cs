@@ -109,31 +109,15 @@ namespace Juego.Entidades
             return resultado;
         }
 
-        private List<Carta> BuscaLasCartas(string codigo)
-        {
-            List<Carta> ListaDeCartas = new List<Carta>();
-            Carta cartaUno = this.JugadorUno.Cartas.SingleOrDefault(x => x.Codigo == codigo);
-            if (cartaUno == null)
-            {
-                cartaUno = this.JugadorUno.Cartas.First();
-            }
-            Carta cartaDos = this.JugadorDos.Cartas.SingleOrDefault(x => x.Codigo == codigo);
-            if (cartaDos == null)
-            {
-                cartaDos = this.JugadorDos.Cartas.First();
-            }
-            ListaDeCartas.Add(cartaUno);
-            ListaDeCartas.Add(cartaDos);
-            return ListaDeCartas;
-        }
+        
 
-        public TipoResultado Cantar(string atributoseleccionado, string codigocarta)
+        public TipoResultado Cantar(string atributoseleccionado)
         {
             TipoResultado Devolver;
             ResultadoMano resultado;
-            var Cartas = this.BuscaLasCartas(codigocarta);
-            Carta cartaUno = Cartas.First();
-            Carta cartaDos = Cartas.Last();
+            
+            Carta cartaUno = this.JugadorUno.Cartas.First();
+            Carta cartaDos = this.JugadorDos.Cartas.First();
 
             int atributocantado = this.DeterminaPosicionAtributo(cartaUno, atributoseleccionado);
             resultado = this.CompararCartas(cartaUno, cartaDos, atributocantado);
@@ -240,9 +224,7 @@ namespace Juego.Entidades
                         }
                     }
                     break;
-
             }
-
             return resultado;
         }
 
