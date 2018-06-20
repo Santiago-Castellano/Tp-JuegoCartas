@@ -8,7 +8,6 @@ namespace Juego.Entidades
 {
     public class Mazo
     {
-        public string Codigo { get; set; }
         public string Nombre { get; set; }
         public List<Carta> Cartas { get; set; }
         public List<string> NombreAtributos { get; set; }
