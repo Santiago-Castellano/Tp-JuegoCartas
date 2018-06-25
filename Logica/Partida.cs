@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Juego.Entidades
 {
@@ -15,8 +13,6 @@ namespace Juego.Entidades
         private bool PartidaFinalizada { get; set; }
         public string IdGanadorMano { get; set; }
         public string IdPerdedorMano { get; set; }
-
-
 
         public Partida(Mazo mazo, Jugador jugador)
         {
@@ -38,7 +34,6 @@ namespace Juego.Entidades
             Roja = 2
         }
         
-
 
         private void ActualizarEstadoPartida()
         {
