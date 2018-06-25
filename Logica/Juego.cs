@@ -22,41 +22,45 @@ namespace Juego.Entidades
 
         private void LeerMazos()
         {
-            var deckFolder = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Juego.Web\Mazos");
-            foreach (var deck in deckFolder)
+            var CarpetaMazos = Directory.GetDirectories(@"C:\Users\santi\Desktop\Tp-JuegoCartas\Juego.Web\Mazos");
+            foreach (var cartas in CarpetaMazos)
             {
                 Mazo mazo = new Mazo();
                 this.AgregaCartasEspecialesAlMazo(mazo);
-                var lines = File.ReadAllLines(deck + "\\Informacion.txt");
-                mazo.Nombre = lines[0];
-                int contador = 0;
-                char[] delimitador = { '|' };
-                var forma = lines[1].Split(delimitador);
-                for (int i = 2; i < forma.Count(); i++)
-                {
-                    mazo.NombreAtributos.Add(forma[i]);
-                }
-                foreach (var line in lines)
-                {
-                    if (contador > 1)
-                    {
-                        var aux = line.Split(delimitador);
-                        Carta carta = new Carta()
-                        {
-                            Nombre = aux[1],
-                            Codigo = aux[0],
-                            Tipo = Carta.TipoCarta.Normal
-                        };
-                        this.AgregaAtributosAUnaCarta(carta, aux, forma);
-                        mazo.Cartas.Add(carta);
-
-                    }
-                    contador += 1;
-                }
-
-
+                var Lineas = File.ReadAllLines(cartas + "\\Informacion.txt");
+                this.AgregaCartasAlMazo(mazo, Lineas);
                 Mazos.Add(mazo);
             }
+        }
+
+        private void AgregaCartasAlMazo(Mazo mazo, string[] Lineas)
+        {
+            mazo.Nombre = Lineas[0];
+            int contador = 0;
+            char[] delimitador = { '|' };
+            var forma = Lineas[1].Split(delimitador);
+            for (int i = 2; i < forma.Count(); i++)
+            {
+                mazo.NombreAtributos.Add(forma[i]);
+            }
+            foreach (var line in Lineas)
+            {
+                if (contador > 1)
+                {
+                    var aux = line.Split(delimitador);
+                    Carta carta = new Carta()
+                    {
+                        Nombre = aux[1],
+                        Codigo = aux[0],
+                        Tipo = Carta.TipoCarta.Normal
+                    };
+                    this.AgregaAtributosAUnaCarta(carta, aux, forma);
+                    mazo.Cartas.Add(carta);
+
+                }
+                contador += 1;
+            }
+            
         }
 
         private void AgregaCartasEspecialesAlMazo(Mazo mazo)
@@ -73,6 +77,22 @@ namespace Juego.Entidades
             amarilla.Codigo = "amarilla";
             mazo.Cartas.Add(roja);
             mazo.Cartas.Add(amarilla);
+        }
+
+        private void AgregaAtributosAUnaCarta(Carta carta, string[] linea, string[] formadeatributos)
+        {
+            for (int i = 0; i < linea.Count(); i++)
+            {
+                if (i > 1)
+                {
+                    Atributo atributo = new Atributo()
+                    {
+                        Nombre = formadeatributos[i],
+                        Valor = Convert.ToDecimal(linea[i]),
+                    };
+                    carta.Atributos.Add(atributo);
+                }
+            }
         }
 
         public Partida UnirsePartida(string nombrejugador, string coneccionjugador, string nombrepartida)
@@ -101,21 +121,7 @@ namespace Juego.Entidades
             this.Partidas.Remove(partidaeliminar);
         }
 
-        private void AgregaAtributosAUnaCarta(Carta carta, string[] linea, string[] formadeatributos)
-        {
-            for (int i = 0; i < linea.Count(); i++)
-            {
-                if (i > 1)
-                {
-                    Atributo atributo = new Atributo()
-                    {
-                        Nombre = formadeatributos[i],
-                        Valor = Convert.ToDecimal(linea[i]),
-                    };
-                    carta.Atributos.Add(atributo);
-                }
-            }
-        }
+        
 
         public List<Partida> ObtenerPartidasPendientes()
         {
