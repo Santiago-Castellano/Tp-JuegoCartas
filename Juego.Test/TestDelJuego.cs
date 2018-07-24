@@ -222,7 +222,7 @@ namespace Juego.Test
         }
 
         [TestMethod]
-        public void DeberiaCantarBien_Especial_GugadorUnoRoja1()
+        public void DeberiaCantarBien_Especial_jugadorUnoRoja1()
         {
             //JUGADOR DOS CON CARTA NORMAL
             Juego.Entidades.Juego juego = new Entidades.Juego();

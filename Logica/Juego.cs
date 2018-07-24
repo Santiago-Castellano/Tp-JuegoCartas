@@ -93,19 +93,19 @@ namespace Juego.Entidades
             }
         }
 
-        public Partida UnirsePartida(string nombrejugador, string coneccionjugador, string nombrepartida)
+        public Partida UnirsePartida(string nombrejugador, string conexionjugador, string nombrepartida)
         {
-            Jugador jugadornuevo = new Jugador() { Nombre = nombrejugador, ConecctionID = coneccionjugador };
+            Jugador jugadornuevo = new Jugador() { Nombre = nombrejugador, ConecctionID = conexionjugador };
             var partida = this.Partidas.SingleOrDefault(x => x.Nombre == nombrepartida);
             partida.JugadorDos = jugadornuevo;
             partida.ComenzarJuego();
             return partida;
         }
 
-        public Partida CrearNuevaPartida(string jugadorunonombre, string jugadorunoconeccion, string nombrepartida, string nombremazo)
+        public Partida CrearNuevaPartida(string jugadorunonombre, string jugadorunoconexion, string nombrepartida, string nombremazo)
         {
             var mazoseleccionado = this.Mazos.SingleOrDefault(x => x.Nombre == nombremazo);
-            var NuevoJugador = new Jugador() { Nombre = jugadorunonombre, ConecctionID = jugadorunoconeccion };
+            var NuevoJugador = new Jugador() { Nombre = jugadorunonombre, ConecctionID = jugadorunoconexion };
             Partida partida = new Partida(mazoseleccionado, NuevoJugador) { Nombre = nombrepartida };
             partida.JugadorUno = NuevoJugador;
             Partidas.Add(partida);

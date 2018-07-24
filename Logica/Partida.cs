@@ -107,10 +107,7 @@ namespace Juego.Entidades
                     this.JugadorDos.Cartas.Add(this.Mazo.Cartas[s]);
                 }
             }
-
         }
-
-        
 
         private int DeterminaPosicionAtributo(Carta carta, string atributoseleccionado)
         {
